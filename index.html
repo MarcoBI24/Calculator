@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Quantico:ital,wght@1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <form >
+        <div class="contenedor-titulo">
+            <h1>Calculator</h1>
+        </div>
+        <input type="number" name="num1" id="num1" placeholder="SUMANDO">
+        <div class="contenedor-selected">
+            <select name="operadores" id="operators" onchange="changePlace()">
+                <option value="sumar" selected>Sumar</option>
+                <option value="restar">Restar</option>
+                <option value="multiplicar">multiplicar</option>
+                <option value="dividir">dividir</option>
+                <option value="raiz">raiz</option>
+                <option value="potencia">potencia</option>
+    
+            </select>
+        </div>
+        <input type="number" name="num2" id="num2" placeholder="SUMANDO">
+        <button class="operar" onclick="operator(event)" id="btnOperar"  >RESULTADO</button>
+        <button class="reset" onclick="reset()">RESET </button>
+        <div class="resultado">
+            <ul id="lista-result">
+            </ul>
+        </div>
+        
+
+
+
+    </form>
+   
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    form{
+        width: 400px;
+        height: min-content;
+        background-image: url(images/green_abstract_gradient.jpg);
+        background-size: cover;
+        margin: auto ;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .resultado{
+            width: 100%;
+            height: 100%;
+            margin: auto;
+            margin-top: 10px;
+            background-color: rgb(79, 80, 80);
+            box-shadow: 0px 0px 2px black;
+    }
+    ul{
+        color: white;
+        font-size: 25px;
+        list-style: none;
+    }
+    li{
+        font-family: "Quantico";
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 35px;
+        width: 100%;
+        border: 2px solid greenyellow;
+    }
+    span{
+        padding: 10px;
+        text-align: center;
+    }
+.contenedor-titulo{
+    height: 100px;
+    width: 100%;
+    display: flex;
+    background: linear-gradient(to bottom , grey , rgb(105, 105, 105), grey );
+    justify-content: center;
+    box-shadow: 0px 3px 4px black;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 900;
+    color: rgb(235, 235, 235);
+}
+h1{
+    font-family: "Monoton";
+    font-weight: 300;
+    font-size: 50px;
+}
+input{
+    border: 2px solid ;
+    border-color: transparent transparent white transparent;
+    font-family: "Quantico";
+    color: white;
+    font-weight: 100;
+    font-size: 30px;
+    width: 100%;
+    max-width: 70%;
+    padding: 10px;
+    outline: none;
+    background-color: transparent;
+    animation: changeColor 2s infinite alternate;
+
+}
+@keyframes changeColor {
+    0%{
+        border-color: transparent transparent greenyellow transparent;
+        color: white;
+    }
+    50%{
+        border-color: transparent transparent white transparent;
+
+        color: greenyellow;
+    }
+    70%{
+        border-color: transparent transparent greenyellow transparent;
+
+        color: white
+    }
+    100%{
+        border-color: transparent transparent white transparent;
+
+        color: greenyellow;
+    }
+}
+select{
+    width: min-content;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: aliceblue;
+    font-size: 18px;
+    background-color: rgb(97, 96, 96);
+    border: 0px solid transparent;
+    padding: 7px;
+
+}
+select:focus{
+    outline: none;
+}
+.contenedor-selected{
+
+    position: relative;
+}
+.contenedor-selected::after{
+    pointer-events: none;
+    display: block;
+    content:"\025be";
+    color: rgb(58, 196, 23);
+    text-align: center;
+    width: 20px;
+    font-size: 25px;
+    height: 100%;
+    background-color: rgb(77, 75, 75);
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    transition: background .4s;
+
+}
+.contenedor-selected:hover::after{
+    background-color: aliceblue;
+}
+button{
+    color: white;
+    border: solid;
+    border-color: white;
+    border-radius: 30px;
+    background-color: green;
+    font-family: "Quantico";
+    font-size: 20px;
+    padding: 5px;
+    animation: changeBoder 6s infinite alternate;
+}
+.operar{
+    width: 50%;
+    max-width: 130px;
+
+}
+.reset{
+
+    width: 50%;
+    max-width: 130px;
+    align-self: flex-end;
+}
+@keyframes changeBoder {
+    0%{
+        border-color: greenyellow;
+    }
+    50%{
+        border-color: white;
+
+
+    }
+    70%{
+        border-color: greenyellow;
+
+    }
+    100%{
+        border-color: white;
+
+    }
+}
+
+</style>
+
+<script>
+
+        let input1 = document.getElementById("num1");
+        let input2 = document.getElementById("num2");
+        function changePlace (){
+            let contenedorOperator = document.getElementById("operators")
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "sumar") {
+                input1.placeholder = "SUMANDO"
+                input2.placeholder = "SUMANDO"
+            }   
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "restar") {
+                input1.placeholder = "MINUENDO"
+                input2.placeholder = "SUSTRAENDO"
+            }
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "multiplicar") {
+                input1.placeholder = "MULTIPLICANDO"
+                input2.placeholder = "MULTIPLICADOR"
+            }if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "dividir") {
+                input1.placeholder = "DIVIDENDO"
+                input2.placeholder = "DIVISOR"
+            }if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "raiz") {
+                input1.placeholder = "INDICE"
+                input2.placeholder = "RADICANDO"
+            }
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "potencia") {
+                input1.placeholder = "BASE"
+                input2.placeholder = "EXPONENTE"
+            }
+
+        }
+        
+        function operator(evt){
+            evt.preventDefault();
+            let a = Number(input1.value);
+            let b = Number(input2.value);
+            let total = 0;
+            let contenedorOperator = document.getElementById("operators")
+
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "sumar") {
+                total = a + b;
+            }
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "restar") {
+                total = a - b;
+            }
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "multiplicar") {
+
+                total = a * b;
+            }
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "dividir") {
+
+                total = a / b;
+            }
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "raiz") {
+
+                total = b ** (1/a);
+            }
+            if (contenedorOperator.options[contenedorOperator.selectedIndex].value == "potencia") {
+
+                total = a ** b;
+            }
+            let lista = document.getElementById("lista-result")
+            let item = `<li id="respuestaItem" >${total} <span class="rpta" id="spanRespuesta" onmouseover="mouseOver(this)" onmouseout="mouseOut(this)"   onclick="deleteLi()"  >X</span></li>`
+           
+            lista.innerHTML += item;
+        }
+   
+    function reset(){
+        let lista = document.getElementById("lista-result")
+        lista.removeChild(item);
+    }
+    function deleteLi(){
+        let li = document.getElementById("respuestaItem");
+        let contenedorPadre = document.getElementById("lista-result")
+        contenedorPadre.removeChild(li)
+    
+    } 
+    
+        
+    
+
+            // creamos el onmouseover para cada x
+        function mouseOver(objeto){
+            objeto.style.background = "grey";
+        }
+        function mouseOut(objeto){
+            objeto.style.background = "none";
+        }
+    // function hoverX(){
+        
+    //     let contenedorX = document.getElementById("spanRespuesta");
+
+    //     contenedorX.style.background = "blue";
+    //     contenedorX.style.cursor = "pointer";
+        
+    // }
+    // function outHover(){
+    //     let contenedorX = document.getElementById("spanRespuesta");
+    //     contenedorX.style.background = "none";
+    //     contenedorX.style.cursor = "pointer";
+            
+          
+        
+    // }
+
+
+    // //  Realiza un script que pida números hasta que se pulse “cancelar”.
+    // //  Si no es un número deberá indicarse con un «alert» y seguir pidiendo.
+    // //  Al salir con “cancelar” deberá indicarse la suma total de los números introducidos.
+    // let sumaTotal = 0;
+    // let cancelado = false;
+    // let xveces = 0;
+    // while (cancelado == false) {
+    //     xveces++
+    //     let numero = prompt(`Digite por ${xveces}° vez`);
+    //     if (Number(numero) == numero ) {
+    //         sumaTotal +=Number(numero);
+    //     } 
+    //     else if(numero != undefined){
+            
+
+    //             alert('es una letra');
+    //     }
+    //     if(numero == undefined){
+    //         alert("no  instertaste nada");
+    //         cancelado=true;
+    //     }
+         
+    // }
+    // alert("la suma total es: "+sumaTotal);
+    
+
+
+
+</script>
+</body>
+</html>
